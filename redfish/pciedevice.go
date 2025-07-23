@@ -379,6 +379,15 @@ type PCIeInterface struct {
 	PCIeType PCIeTypes
 }
 
+func (p *PCIeInterface) UnmarshalJSON(b []byte) error {
+	// If it's an empty array, ignore zero value.
+	if string(b) == "[]" {
+		return nil
+	}
+
+	return json.Unmarshal(b, &p)
+}
+
 // Assembly gets the assembly for this device.
 func (pciedevice *PCIeDevice) Assembly() (*Assembly, error) {
 	if pciedevice.assembly == "" {
